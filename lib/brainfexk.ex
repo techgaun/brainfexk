@@ -55,14 +55,17 @@ defmodule Brainfexk do
   def tokenize(input), do: do_tokenize(input, [])
 
   defp do_tokenize("", tokens), do: Enum.reverse(tokens)
+
   defp do_tokenize(<<chr, rest::binary>>, tokens) when chr in @tokens do
     do_tokenize(rest, [@tokens_map[<<chr::utf8>>] | tokens])
   end
+
   defp do_tokenize(<<_, rest::binary>>, tokens), do: do_tokenize(rest, tokens)
 
   def generate(tokens), do: do_generate(tokens, @c_head)
 
   defp do_generate([], code), do: "#{code}\n  return 0;\n}"
+
   defp do_generate([tok | rest], code) do
     do_generate(rest, "#{code}  #{token_code(tok)}\n")
   end
